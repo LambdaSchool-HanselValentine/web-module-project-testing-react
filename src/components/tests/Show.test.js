@@ -3,8 +3,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Show from "./../Show";
-import handleSelect from "../Display";
-import Episode from "../Episode";
 
 const testShow = {
 	//add in approprate test data structure here.
@@ -23,6 +21,7 @@ test("renders testShow and no selected Season without errors", () => {
 
 test("renders Loading component when prop show is null", () => {
 	render(<Show show={undefined} selectedSeason={"none"} />);
+
 	const loading = screen.queryByText(/Fetching data.../i);
 	expect(loading).toBeInTheDocument();
 });
@@ -47,7 +46,6 @@ test("handleSelect is called when an season is selected", () => {
 });
 
 test("component renders when no seasons are selected and when rerenders with a season passed in", () => {
-	// render(<Show show={testShow} selectedSeason={"none"} />);
 	const { rerender } = render(<Show show={testShow} selectedSeason={"none"} />);
 	rerender(<Show show={testShow} selectedSeason={1} />);
 });
