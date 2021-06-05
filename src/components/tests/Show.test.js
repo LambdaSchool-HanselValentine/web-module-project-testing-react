@@ -3,6 +3,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Show from "./../Show";
+import handleSelect from "../Display";
+import Episode from "../Episode";
 
 const testShow = {
 	//add in approprate test data structure here.
@@ -32,16 +34,23 @@ test("renders same number of options seasons are passed in", () => {
 });
 
 test("handleSelect is called when an season is selected", () => {
-	const handleSelect = jest.fn(() => {
-		return "this is fake handle";
-	});
 	render(<Show show={testShow} selectedSeason={"none"} />);
-	const selectSeason = screen.getById(testShow.seasons.id);
+
+	const selectSeason = screen.getByLabelText(/Select A Season/i);
 	userEvent.click(selectSeason);
-	expect(handleSelect).toHaveBeenCalled();
+
+	const seasonName = screen.getByText(/Season 1/i);
+	userEvent.click(seasonName);
+
+	const episode = screen.getByText("season 1");
+	expect(episode).toBeInTheDocument();
 });
 
-test("component renders when no seasons are selected and when rerenders with a season passed in", () => {});
+test("component renders when no seasons are selected and when rerenders with a season passed in", () => {
+	// render(<Show show={testShow} selectedSeason={"none"} />);
+	const { rerender } = render(<Show show={testShow} selectedSeason={"none"} />);
+	rerender(<Show show={testShow} selectedSeason={1} />);
+});
 
 //Tasks:
 //1. Build an example data structure that contains the show data in the correct format. A show should contain a name, a summary and an array of seasons, each with a id, name and (empty) list of episodes within them. Use console.logs within the client code if you need to to verify the structure of show data.
